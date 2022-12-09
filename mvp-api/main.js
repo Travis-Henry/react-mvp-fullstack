@@ -15,8 +15,13 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/api/test', (req, res, next)=>{
-    res.send("success");
-
+    pool.query("SELECT * FROM users")
+    .then((results=>{
+        res.send(JSON.stringify(results.rows))
+    }))
+    .catch((error)=>{
+        next({status:500, message:"opps"});
+    });
 })
 
 //Error handler
