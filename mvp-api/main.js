@@ -47,7 +47,7 @@ app.post('/api/login', (req, res, next)=>{
         //Checks if password matches
         if(results.rows[0].password === password){
             //Returns access token
-            const user = {username:username, password:password};
+            const user = {username:username, password:password, user_id:results.rows[0].user_id};
             const accessToken = jwt.sign(user, config.secret);
             res.json({accessToken: accessToken});
         }else{
@@ -77,7 +77,7 @@ app.post('/api/register', (req, res, next)=>{
             //Adds a new user
             pool.query(`INSERT INTO users(username, password) VALUES ('${username}','${password}') RETURNING *`)
             .then(info=>{
-                const user = {username:username, password:password};
+                const user = {username:username, password:password, user_id:info.rows[0].user_id};
                 const accessToken = jwt.sign(user, config.secret);
                 res.json({accessToken: accessToken});
             })
@@ -96,8 +96,23 @@ app.post('/api/register', (req, res, next)=>{
     });
 });
 
-app.get('/api/messages', (req, res, next)=>{
+//Return users messages
+app.get('/api/messages', authenticateToken, (req, res, next)=>{
+    // pool.query(`SELECT messages.message_id, messages.content`)
+    // .then()
+    // .catch(error=>{
 
+    // });
+    //TODO
+
+
+
+
+    
+
+
+
+    res.send(req.user);
 });
 
 //Error handler
