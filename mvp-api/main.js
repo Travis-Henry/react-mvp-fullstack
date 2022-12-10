@@ -3,7 +3,7 @@ const {Pool} = require('pg');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
-const config = require('./config')[process.env.NODE_ENV||'dev'];
+const config = require('./config')[process.env.NODE_ENV || 'dev'];
 
 const pool = new Pool({
     connectionString: config.connectionString
@@ -15,13 +15,21 @@ const PORT = config.port;
 app.use(cors());
 app.use(express.json());
 
+app.get('/debug/database', (req, res, next)=>{
+
+    res.json({env:process.env,
+        config:config
+    });
+});
+
 app.get('/api/test', (req, res, next)=>{
     pool.query("SELECT * FROM users")
     .then((results=>{
         res.send(JSON.stringify(results.rows))
     }))
-    .catch((error)=>{
+    .catch(error=>{
         next({status:500, message:"opps"});
+        return;
     });
 })
 

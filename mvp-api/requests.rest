@@ -19,3 +19,7 @@ Content-Type: application/json
     "username":"Gabe",
     "password":"password123"
 }
+
+###
+
+GET http://localhost:3001/api/testDB
